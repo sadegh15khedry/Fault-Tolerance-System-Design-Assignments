@@ -1,0 +1,24 @@
+R := table();
+nodes := ["N1", "N2", "N3", "N4"];
+for i to nops(nodes) do
+    node := nodes[i];
+    R[node] := parse(cat("R", node));
+end do;
+series_connections := [["N1", "N2"]];
+parallel_connections := [["N3", "N4"]];
+ReliabilitySeries := proc(rs) local i, result; result := 1; for i to nops(rs) do result := result*R[rs[i]]; end do; return result; end proc;
+ReliabilityParallel := proc(rp) local i, result; result := 1; for i to nops(rp) do result := result*(1 - R[rp[i]]); end do; return 1 - result; end proc;
+Rs := 1;
+for i to nops(series_connections) do
+    Rs := Rs*ReliabilitySeries(series_connections[i]);
+end do;
+Rp := 1;
+for i to nops(parallel_connections) do
+    Rp := Rp*ReliabilityParallel(parallel_connections[i]);
+end do;
+R_total := Rs*Rp;
+R_total_simplified := simplify(R_total);
+printf("Reliability of the system is: %a\n", R_total_simplified);
+Reliability of the system is: -RN1*((RN4-1)*RN3-RN4)*RN2
+
+NULL;

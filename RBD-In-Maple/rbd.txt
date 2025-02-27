@@ -1,0 +1,6 @@
+Nodes:
+N1, N2, N3, N4
+
+Connections:
+Series: N1, N2
+Parallel: N3, N4
